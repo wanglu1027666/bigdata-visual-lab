@@ -1,0 +1,11 @@
+import pandas as pd, matplotlib.pyplot as plt, numpy as np, os
+BASE = r"C:\Users\茶叶蛋\Desktop\bigdata-visual-lab"; OUT = os.path.join(BASE, "outputs")
+df = pd.read_excel(os.path.join(BASE, "data", "第二章 图表(后15).xlsx"), sheet_name=9, header=None)
+labels = df.iloc[3:, 1].dropna().tolist(); actual = df.iloc[3:, 2].dropna().tolist(); target = df.iloc[3:, 3].dropna().tolist()
+pass_v = df.iloc[3:, 4].dropna().tolist(); good_v = df.iloc[3:, 5].dropna().tolist(); exc_v = df.iloc[3:, 6].dropna().tolist()
+y = np.arange(len(labels)); fig, ax = plt.subplots(figsize=(9,5))
+ax.barh(y, pass_v, color="#D9D9D9", height=0.6, label="及格"); ax.barh(y, good_v, left=pass_v, color="#A6A6A6", height=0.6, label="良好")
+ax.barh(y, exc_v, left=[a+b for a,b in zip(pass_v, good_v)], color="#7F7F7F", height=0.6, label="优秀")
+ax.barh(y, actual, color="#4472C4", height=0.25, label="实际"); ax.scatter(target, y, marker="|", s=300, color="black", label="目标")
+ax.set_yticks(y); ax.set_yticklabels(labels); ax.legend(); ax.set_title("子弹图")
+fig.savefig(os.path.join(OUT, "25_bullet.png"), dpi=150); plt.close(fig)
